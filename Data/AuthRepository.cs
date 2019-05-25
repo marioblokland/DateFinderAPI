@@ -30,14 +30,14 @@ namespace DatingApp.API.Data
         }
 
         /**
-         * Registers the user
+         * Registers
          */
         public async Task<User> Register(User user, string password)
         {
-            CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
+            var (hash, salt) = CreatePasswordHash(password);
 
-            user.PasswordSalt = passwordSalt;
-            user.PasswordHash = passwordHash;
+            user.PasswordHash = hash;
+            user.PasswordSalt = salt;
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
@@ -54,14 +54,16 @@ namespace DatingApp.API.Data
         }
 
         /**
-         * Creates a password hash
+         * Creates and returns the password hash and password salt, by the provided password
          */
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        private (byte[] hash, byte[] salt) CreatePasswordHash(string password)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                var passwordSalt = hmac.Key;
+                var passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+
+                return (passwordHash, passwordSalt);
             }
         }
 
