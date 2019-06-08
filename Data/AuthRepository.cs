@@ -32,15 +32,15 @@ namespace DatingApp.API.Data
         /**
          * Registers
          */
-        public async Task<User> Register(User user, string password)
+        public User Register(User user, string password)
         {
             var (hash, salt) = CreatePasswordHash(password);
 
             user.PasswordHash = hash;
             user.PasswordSalt = salt;
 
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
             return user;
         }

@@ -11,7 +11,7 @@ namespace DatingApp.API.Data
         /**
          * Registers the user
          */
-        Task<User> Register(User user, string password);
+        User Register(User user, string password);
 
         /**
          * Logs the user in
