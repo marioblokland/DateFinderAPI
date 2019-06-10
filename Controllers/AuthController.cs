@@ -40,7 +40,7 @@ namespace DatingApp.API.Controllers
                 Username = userToRegisterDto.Username
             };
 
-            await _repository.Register(userToCreate, userToRegisterDto.Password);
+            _repository.Register(userToCreate, userToRegisterDto.Password);
 
             // TODO use CreatedAtRoute
             return StatusCode(201);
